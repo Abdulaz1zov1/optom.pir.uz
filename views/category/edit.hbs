@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Новая категория</h5>
+                <p class="card-description">Запольните поля</p>
+                <form action="/category/save" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="{{category._id}}">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="title" value="{{category.title}}" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                <label for="floatingInput">Название категории на Русском</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="title_uz" value="{{category.title_uz}}" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                <label for="floatingInput">Название категории на Узбекском</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" id="status" name="status" data-value="{{category.status}}" value="1" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Активный</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let status = document.getElementById('status')
+
+
+    if (status.getAttribute('data-value')==1){
+        status.checked = true
+    } else {
+        status.checked = false
+    }
+
+
+
+</script>

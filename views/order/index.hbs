@@ -1,0 +1,251 @@
+<div class="row">
+    <div class="col">
+        {{#if report}}
+        <div class="row">
+            <div class="col-3 col-xs-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Заказы получены</h5>
+                            <h5 class="card-title"><span class="localnumber">{{report.allsumma}}</span> сум</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Заказы в ожидание</h5>
+                            <h5 class="card-title"><span class="localnumber">{{report.waitsumma}}</span> сум</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Первый заказ</h5>
+                            <h5 class="card-title"> <span class="localdate">{{report.forder}}</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title">Последный заказ</h5>
+                            <h5 class="card-title"><span class="localdate">{{report.lorder}}</span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">{{title}}</h5>
+                </div>
+                <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">№</th>
+                            {{#if control}}
+                            <th scope="col">Заказчик</th>
+                            {{/if}}
+                            <th scope="col">Дата</th>
+                            <th scope="col">Общая сумма</th>
+                            <th scope="col">Скидка</th>
+
+                            <th scope="col">Список заказов</th>
+
+                            <th scope="col">Статус</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#if control}}
+                            {{#each orders}}
+                            <tr class="{{class}}">
+                                <td>{{index}}</td>
+                                <td>{{user.name}}</td>
+
+                                <td>{{date}}</td>
+                                <td><span class="localnumber">{{price}}</span> сум</td>
+                                <td><span class="localnumber">{{sale}}</span> сум</td>
+                                <td>
+                                    <button class="btn btn-info" onclick="getList('{{_id}}')" data-bs-toggle="modal" data-bs-target="#cardlist">Список</button>
+                                </td>
+                                <td>{{status}}</td>
+                                <td class="text-right">
+
+                                    <a href="/order/status/{{_id}}/2" class="btn btn-success ml-2">
+                                        <i class="fas fa-check"></i></a>
+                                    <a href="/order/status/{{_id}}/3" class="btn btn-danger ml-2">
+                                        <i class="fas fa-times"></i></a>
+                                </td>
+                                <td class="text-right">
+                                    <a href="/order/status/{{_id}}/1" class="btn btn-warning ml-2">
+                                        <i class="fas fa-info"></i></a>
+                                    <a href="/order/delete/{{_id}}"
+                                        onclick="return confirm('Вы уверены?')"
+                                        class="ml-2 btn btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        {{else}}
+                            {{#each orders}}
+                            <tr class="{{class}}">
+                                <td>{{index}}</td>
+                                <td>{{date}}</td>
+                                <td><span class="localnumber">{{price}}</span> сум</td>
+                                <td><span class="localnumber">{{sale}}</span> сум</td>
+                                <td>
+                                    <button class="btn btn-info" onclick="getList('{{_id}}')" data-bs-toggle="modal" data-bs-target="#cardlist">Список</button>
+                                </td>
+                                <td>{{status}}</td>
+                                
+                            </tr>
+                            {{/each}}
+                        {{/if}}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cardlist" tabindex="-1" aria-labelledby="cardmodal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Список книг
+                    <b id="ordername"></b></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="cards">
+
+            </div>
+            <div class="modal-footer printed d-flex justify-content-between">
+
+                <button class="btn btn-success" onclick="window.print()">Распечатеть</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    localStorage.removeItem('cart')
+    let myModal = document.getElementById('cards')
+    let role = null
+    fetch('/order/role')
+    .then(res => res.json())
+    .then(val => role = val)
+    .catch(er=>console.log(er))
+    const getList = (id) => {
+        myModal.innerHTML = ''
+        fetch(`/order/getbyid/${id}`)
+        .then(res=>res.json())
+        .then(order => {
+            // let orderform = document.forms.sale
+            // orderform._id.value = id
+            // orderform.sale.value = order.sale
+            let ordername = document.getElementById('ordername')
+
+            let list = ''
+            if (role == 0){
+                list = `<div class="d-flex justify-content-between">
+                            <div class="col-4">Адрес доставки: ${order.address}</div>
+                            <div class="col-4">Получатель: ${order.name}</div>
+                            <div class="col-4">Номер телефона: ${order.phone}</div>
+                        </div>
+                <hr>
+                <div class="table-responsive"><table class="table"><tr><th>№</th><th>Название книг</th><th>Кол.пачек</th><th>Кол
+                .штук</th><th>Общая</th><th>Цена штука</th><th>Общая цена</th><th></th></tr>`
+            }  else {
+                list = `<div class="d-flex justify-content-between">\n<div class="col-4">Адрес доставки: ${order
+                        .address}</div>\n<div class="col-4">Получатель: ${order.name}</div>\n<div class="col-4">Номер
+                         телефона: ${order.phone}</div>\n</div>\n<hr><div class="table-responsive"><table class="table"><tr><th>№</th><th>Название
+                         книг</th><th>Кол.пачек</th><th>Кол.штук</th><th>Общая</th><th>Цена штука</th><th>Общая цена</th></tr>`
+            }
+            ordername.innerHTML = order.user.name
+            let allpack = 0
+            let allpr = 0
+            let allcount = 0
+            order.products.forEach((product,index) => {
+                allpack += Math.floor(product.num/product.product.pack)
+                allpr += product.num%product.product.pack
+                allcount += product.num
+                list += `
+                    <tr>
+                           <td>${index+1}</td>
+                        <td>${product.product.title}</td>
+                        <td>${Math.floor(product.num/product.product.pack)} пачек по ${product.product.pack} шт</td>
+                        <td>${product.num%product.product.pack} шт.</td>
+                        <td>${product.num} шт</td>
+                        <td><span class="localnumber">${product.price.toLocaleString()}</span> сум</td>
+                        <td><span class="localnumber">${(product.price*product.num).toLocaleString()}</span> сум</td>
+
+                        ${role==0?`
+                        <td>
+                              <div class="change__${product._id} d-flex">
+                                <input type="number" value="${Math.floor(product.num/product.product.pack)}" data-pack="${product.product.pack}" class="form-control pack_${product._id}" style="width:90px">
+                                <input type="number" value="${Math.floor(product.num%product.product.pack)}"  class="form-control count_${product._id}" style="width:90px">
+                                <button class="btn btn-warning" onclick="changeNum('${id}','${index}','${product._id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                              </div>
+                        </td>`:''
+                        }
+                    </tr>`
+            })
+            list +=`<tfooter>
+                    <tr>
+                        <th>Итого</th>
+                        <th></th>
+                        <th>${allpack} пачек</th>
+                        <th>${allpr} шт</th>
+                        <th>${allcount} шт</th>
+                        <th colspan="5"><strong>${order.price.toLocaleString()} сум
+                            <span class="sale">${order.sale>0?'(Скидка '+order.sale.toLocaleString()+' сум)':''}</span></strong></th>
+                    </tr>
+
+                    <tr style="display:${order.sale>0?'table-row':'none'}">
+                        <th colspan="2">После скидки итого</th>
+                        <th></th><th></th>
+                        <th></th>
+                        <th colspan="5">
+                            <strong>
+                                ${order.sale>0?(order.price-order.sale).toLocaleString():order.price.toLocaleString()} сум
+                                <span class="sale"></span>
+                            </strong>
+                        </th>
+                    </tr>
+                </tfooter></table></div>`
+            myModal.innerHTML = list
+        })
+    }
+
+    const changeNum = (id,index,productId) =>{
+        let packBox = document.querySelector(`.pack_${productId}`)
+        let packData = packBox.getAttribute('data-pack')
+        let count = +document.querySelector(`.count_${productId}`).value
+        let pack = +packBox.value
+
+        let num = pack * packData + count
+        fetch(`/order/changeby/${id}/${index}/${num}`)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            getList(id)
+        })
+    }
+
+</script>
+

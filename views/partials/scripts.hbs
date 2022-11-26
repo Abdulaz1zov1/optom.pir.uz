@@ -1,0 +1,36 @@
+<script>
+    let notiflist = document.getElementById('notiflist')
+    let notifcount = document.getElementById('notificationsDropDown')
+    fetch('/order/check')
+    .then(res => res.json())
+    .then(orders => {
+        console.log(orders)
+        notifcount.innerHTML = orders.length
+        if (orders.length>0)
+            orders.forEach(order=>{
+                let date = new Date(order.date)
+                notiflist.innerHTML += `
+        <a href="/order">
+            <div class="header-notif d-flex">
+                <div class="notif-image">
+                    <span class="notification-badge bg-info text-white">
+                        <i class="fas fa-bullhorn"></i>
+                    </span>
+                </div>
+                <div class="notif-text">
+                    <p class="bold-notif-text">Заказа от ${order.user.name}</p>
+                    <small>${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}</small>
+                </div>
+            </div>
+        </a>
+    `
+            })
+    })
+</script>
+<script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="/assets/plugins/perfectscroll/perfect-scrollbar.min.js"></script>
+<script src="/js/lightbox-plus-jquery.min.js"></script>
+<script src="/assets/js/main.js"></script>

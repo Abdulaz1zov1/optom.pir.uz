@@ -1,0 +1,149 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <form action="/order/" method="post" name="order">
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="user" value="{{user._id}}">
+                    <input type="hidden" name="order" id="order">
+                    <div class="row inner">   
+                        <div class="col-8">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" id="product-0" data-index="0" aria-label="Product" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each sale}}
+                                    <option value="{{product._id}}|{{price}}">{{product.title}} | {{product.pack}} пачка. {{product.count}} шт. | {{price}} сум</option>
+                                    {{/each}}
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="product-0">Список товаров</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <input type="number" class="form-control" id="count-0" data-index="0" placeholder="Количество" required>
+                                <label for="count-0">Количество</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button onclick="add(event)" class="btn btn-success ms-auto">+</button>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Отправить заказ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let form = document.forms.order
+    let order = document.getElementById('order')
+    let inner = document.querySelector('.inner')
+    let index = 1
+    let sales = []
+    let selectPro = ''
+    fetch('/order/products')
+    .then(res => res.json())
+    .then(data => {
+        sales = data
+    })
+
+    function add(e){
+        e.preventDefault()
+        let col_8 = document.createElement('div')
+        col_8.classList.add('col-8')
+
+        let mb_3 = document.createElement('div')
+        mb_3.classList.add('mb-3')
+        mb_3.classList.add('form-floating')
+
+        let select = document.createElement('select')
+        select.classList.add('form-select')
+        select.setAttribute('id',`product-${index}`)
+        select.setAttribute('data-index',`${index}`)
+        
+        let optionL = document.createElement('option')
+            optionL.setAttribute('value','')
+            optionL.textContent = `Выберите из списка`
+            optionL.setAttribute('selected',true)
+            optionL.setAttribute('disabled',true)
+            select.appendChild(optionL)
+
+        sales.forEach(sale => {
+            let option = document.createElement('option')
+            option.setAttribute('value',`${sale.product._id}|${sale.price}`)
+            option.textContent = `${sale.product.title} | ${sale.product.pack} пачка. ${sale.product.count} шт. | ${sale.price} сум`
+
+            select.appendChild(option)
+        })
+
+        let invalid_feedback = document.createElement('div')
+        invalid_feedback.classList.add('invalid-feedback')
+        invalid_feedback.textContent = 'Выберите из списка'
+
+        let label = document.createElement('label')
+        label.setAttribute('for',`product-${index}`)
+        label.textContent = 'Список товаров'
+
+        mb_3.appendChild(select)
+        mb_3.appendChild(invalid_feedback)
+        mb_3.appendChild(label)
+
+        col_8.appendChild(mb_3)
+
+        inner.appendChild(col_8)
+
+        let col_4 = document.createElement('div')
+        col_4.classList.add('col-4')
+
+        let mb_3_i = document.createElement('div')
+        mb_3_i.classList.add('mb-3')
+        mb_3_i.classList.add('form-floating')
+
+        let input = document.createElement('input')
+        input.classList.add('form-control')
+        input.setAttribute('type','number')
+        input.setAttribute('id',`count-${index}`)
+        input.setAttribute('placeholder','Количество')
+        input.setAttribute('data-index',`${index}`)
+
+        let label_i = document.createElement('label')
+        label_i.setAttribute('for',`count-${index}`)
+        label_i.textContent = 'Количество'
+
+        mb_3_i.appendChild(input)
+        mb_3_i.appendChild(label_i)
+        col_4.appendChild(mb_3_i)
+
+        inner.appendChild(col_4)
+
+        index++
+    }
+
+    form.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        let orderList = []
+        for(let ind=0;ind<index;ind++){
+            let val = document.querySelector(`select[data-index='${ind}']`).value
+            let count = document.querySelector(`input[data-index='${ind}']`).value
+            val = val.split('|')
+            if (val[0]!=='' && count>0){
+                orderList.push({
+                    product: val[0],
+                    price: val[1],
+                    count: count
+                })
+            }
+        }
+        order.value = JSON.stringify(orderList)
+        form.submit()
+    })
+
+</script>

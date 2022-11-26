@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"piruz.settings"},{"v":2,"unique":true,"key":{"key":1},"name":"key_1","ns":"piruz.settings","background":true}],"uuid":"fe4c7891ac584d8e803259a0333ae05b"}

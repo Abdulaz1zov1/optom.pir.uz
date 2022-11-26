@@ -1,0 +1,20 @@
+<div class="page-sidebar">
+    <ul class="list-unstyled accordion-menu">
+
+        <li class="sidebar-title">Склад</li>
+        <li>
+            <a href="/order/"><i data-feather="file"></i>Заказы</a>
+        </li>
+
+        <li class="sidebar-title">
+            Управление
+        </li>
+        <li {{#if isProduct}}class="active-page"{{/if}}>
+            <a href="/product/">
+                <i data-feather="list"></i>Товары
+            </a>
+        </li>
+
+
+    </ul>
+</div>

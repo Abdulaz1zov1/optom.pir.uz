@@ -1,0 +1,136 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">{{title}}</h5>
+                    <button data-bs-toggle="modal" data-bs-target="#newcat" class="btn btn-success">Назначить цену</button>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Продукт</th>
+                            <th scope="col">Остатка</th>
+                            <th scope="col">Стоимость</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each sales}}
+                        <tr>
+                            <td>{{product.title}}</td>
+                            <td>{{product.pack}} упаковки. <span class="localnumber">{{product.count}}</span> шт</td>
+                            <td><span class="localnumber">{{price}}</span> сум</td>
+                            <td class="text-right">
+                                <button data-bs-toggle="modal" data-bs-target="#up" onclick="edit('{{_id}}')" class="btn btn-warning ml-2">
+                                    <i class="fas fa-pen"></i></button>
+                                <a href="/users/sales/delete/{{_id}}" 
+                                    onclick="return confirm('Вы уверены?')" 
+                                    class="ml-2 btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newcat" tabindex="-1" aria-labelledby="newcat" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/users/sales" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="user" value="{{user._id}}">
+
+                    <div class="mb-3 form-floating">
+                        <select class="form-select" name="product" id="product" aria-label="Product" required>
+                            <option selected disabled value="">Выберите из списка</option>
+                            {{#each products}}
+                                <option value="{{_id}}">"{{title}}". общая количество
+                                    {{count}} шт.{{pack}} в одном пачке.  </option>
+                            {{/each}}
+                        </select>
+                        <div class="invalid-feedback">
+                            Выберите из списка
+                        </div>
+                        <label for="product">Список товаров</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="price" class="form-control" id="price" placeholder="Стоимость" required>
+                        <label for="price">Стоимость</label>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="up" tabindex="-1" aria-labelledby="up" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/users/editsales" name="editsale" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="_id" value="{{sale._id}}">
+                    <input type="hidden" name="user" value="{{user.id}}">
+
+                    <div class="mb-3 form-floating">
+                        <select class="form-select editable" name="product" id="upproduct" aria-label="Product" >
+                            <option>Выберите из списка</option>
+                            {{#each allproducts}}
+                                <option value="{{_id}}">{{title}} | {{pack}} пачка. {{count}} шт. </option>
+                            {{/each}}
+                        </select>
+                        <div class="invalid-feedback">
+                            Выберите из списка
+                        </div>
+                        <label for="upproduct">Список товаров</label>
+                    </div>
+
+                    <div class="mb-3 form-floating">
+                        <input type="number" name="price" class="form-control" id="upprice" placeholder="Стоимость" value={{sale.price}}>
+                        <label for="upprice">Стоимость</label>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let saleform = document.forms.editsale
+    const edit = (id) => {
+        fetch(`/users/sales/edit/${id}`)
+        .then(res=>res.json())
+        .then(sale => {
+            console.log(sale)
+            document.getElementById('upproduct').value = sale.product
+            saleform._id.value = sale._id
+            saleform.product.value = sale.product
+            saleform.price.value = sale.price
+            console.log(saleform.product)
+        })
+    }
+</script>

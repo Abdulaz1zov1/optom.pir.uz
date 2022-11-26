@@ -1,0 +1,230 @@
+/* Write your custom CSS here */
+.table td, .table th{
+    color: #000;
+}
+@media print {
+    input,
+    button,
+    .printed,
+    hr,
+    .card {
+        display: none!important;
+    }
+    .modal-body,
+    .modal-header {
+        padding: 10px 0px 0px !important;
+    }
+
+    .table th,
+    .table td{
+        font-size: 12px;
+        padding: 5px!important;
+    }
+}
+.toast {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    overflow: hidden;
+}
+.badge.status-0{
+    background-color: #ee6e83!important;
+    color: #fff;
+}
+.badge.status-0,
+.badge.status-1{
+    display: inline-block;
+    
+}
+.ml-1 {
+    margin-left: 5px;
+}
+.card-title.nomb {
+    margin-bottom: 0;
+}
+.card.pos {
+    position: relative;
+}
+a.profile-dropdown{
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+.card.count-0, 
+.card.danger.pos {
+    background-color: #f00;
+    color: #fff;
+}
+.card.count-0 .cardbtns,
+.card.danger.pos .cardbtns {
+    display: none;
+}
+.card.count-0 .card__title:before,
+.card.danger.pos .card__title:before{
+    content: 'Нет в наличие';
+    display: block;
+}
+.card.pos:hover .card__btns {
+    opacity: 1;
+}
+.card__btns {
+    position: absolute;
+    left: 5px;
+    transition: 0.5s;
+    top: 0;
+    opacity: 0;
+}
+.badge.status-1{
+    background-color: #6bcac2!important;
+    color: #fff;
+}
+.badge.status-1:before {
+    content: 'Активный';
+    
+}
+.badge.status-0:before {
+    content: 'Скрыто';
+}
+.text-right {
+    text-align: right;
+    white-space: nowrap;
+}
+.ml-2 {
+    margin-left: 1rem;
+}
+.cardbtns input{
+    flex-basis: 40%;
+    width: 40%;
+    border:1px solid #e7e7e7;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+}
+
+.cardbtns {
+    display: flex;
+    left: 0;
+    width: 100%;
+    transition: 0.3s;
+
+}
+.card.pos:hover .cardbtns {
+    opacity: 1;
+}
+.card__info {
+    display: flex;
+    margin-bottom: 2px;
+}
+.card__price {
+    font-weight: bold;
+}
+.card__bg {
+    flex-basis: 46%;
+    height: 194px;
+    background-size: contain;
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+.card__right b{
+    font-size: 14px;
+    margin-bottom: 4px;
+
+}
+.card__cat,
+.card__right span{
+    font-size: 12px;
+
+}
+.card__title {
+    font-size: 15px;
+    font-weight: bold;
+    height: 46px;
+    overflow: hidden;
+}
+.card__right {
+    flex-basis: 54%;
+    padding-left: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.card__row span{
+    font-size: 12px;
+}
+.card__row {
+    display: flex;
+    justify-content: space-between;
+}
+.allcard:hover {
+    background-color: #1d6aa0;
+    color: #fff;
+}
+.carditem {
+    display: flex;
+    align-items: center;
+}
+.cardnum {
+    margin-left: auto;
+    margin-right: 10px;
+}
+.cardprice {
+    font-weight: bold;
+    margin-left: 10px;
+}
+.cardremove button{
+    border:0;
+    color: #ea1c1c;
+    text-decoration: underline;
+    background: unset;
+    padding: 0;
+}
+.cardremove {
+    text-align: right;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+
+}
+.allcard {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    font-size: 18px;
+    height: 60px;
+    background-color: #2385c9;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    padding: 0;
+}
+.allcard span {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #d92b2b;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    top: 0;
+}
+
+.card.none {
+    pointer-events: none;
+    opacity: 0.5;
+}
+.page-header .navbar .navbar-brand{
+    background: url(../images/pir.png) center center no-repeat;
+    background-size: contain;
+    width: 93px;
+}
+
+@media (max-width: 700px) {
+    .mobile-direction{
+        flex-direction: column;
+    }
+}

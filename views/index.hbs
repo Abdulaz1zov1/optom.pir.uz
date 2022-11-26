@@ -1,0 +1,193 @@
+
+  <div class="row">
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Книги</h5>
+          <div class="d-flex justify-content-between">
+              <p>Общ.количество</p>
+              <h3>{{pack}} шт</h3>
+          </div>
+            <div class="d-flex justify-content-between">
+                <p>Общ.сумма</p>
+                <h3>{{allsumma}} с</h3>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Ритейлеры</h5>
+          <h2>{{users.length}}</h2>
+          <p>Общая количество</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Заказы</h5>
+          <h2>{{waitOrder.length}}</h2>
+          <p>Не обработанные</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Заказы</h5>
+          <h2>{{successOrder.length}}</h2>
+          <p>Завершенные</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{#if control}}
+
+
+
+  <div class="row">
+    <div class="col-md-12 col-lg-8">
+      <div class="card table-widget">
+        <div class="card-body">
+          <h5 class="card-title">Последные заказы</h5>
+          <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                  <tr>
+
+                      <th scope="col">Заказчик</th>
+
+                      <th scope="col">Дата</th>
+                      <th scope="col">Общая сумма</th>
+                      <th scope="col">Статус</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+                      {{#each orders}}
+                          <tr>
+                              <td>{{user.name}}</td>
+
+                              <td>{{date}}</td>
+                              <td>{{price}} сум</td>
+
+                              <td>{{status}}</td>
+
+                          </tr>
+                      {{/each}}
+
+                  </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="col-sm-12 col-md-4">
+      <div class="card stat-widget">
+        <div class="card-body">
+          <h5 class="card-title">Ритейлеры</h5>
+          {{#each users}}
+          <div class="transactions-list">
+            <div class="tr-item">
+              <div class="tr-company-name">
+                <div class="tr-icon tr-card-icon tr-card-bg-primary text-primary">
+                  <i data-feather="user"></i>
+                </div>
+                <div class="tr-text">
+                  <a href="/users/product/{{_id}}">
+                    <h4>{{name}}</h4>
+                  </a>
+                  <p>{{phone}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+
+        </div>
+      </div>
+        <div class="card stat-widget">
+            <div class="card-body">
+                <h5 class="card-title">Топ 5 книг</h5>
+                <div id="bests">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+  </div>
+  {{/if}}
+
+
+  <script>
+      fetch('/allorders')
+      .then(res => res.json())
+      .then(data => {
+          let orders = data
+          let allproducts = {}
+          // console.log(orders)
+          let namesproducts = {}
+          orders.forEach(order => {
+              let {products} = order
+              products.forEach(item => {
+                  // console.log(item)
+                  //   if (item.product._id == '622237f3f65fe0450bbf22bc'){
+                  //       console.log(item)
+                  //   }
+                  if (allproducts[item.product._id]){
+                      namesproducts[item.product._id] = item.product.title
+                      allproducts[item.product._id] += item.num
+                  } else {
+                      namesproducts[item.product._id] = item.product.title
+                      allproducts[item.product._id] = item.num
+                  }
+              })
+          })
+          let max = [{_id: '',value: 0},{_id: '',value: 0},{_id: '',value: 0},{_id: '',value: 0},{_id: '',value: 0}]
+          for(let i=0;i<1;i++){
+              for(key in allproducts){
+                  if (allproducts[key]>max[i].value){
+                      max[i]._id = key
+                      max[i].value = allproducts[key]
+                  }
+              }
+          }
+          for(let i=1;i<5;i++){
+              for(key in allproducts){
+                  if (allproducts[key]>max[i].value && i>0 && allproducts[key]<max[i-1].value){
+                      max[i]._id = key
+                      max[i].value = allproducts[key]
+                  }
+              }
+          }
+          max.forEach(item => {
+              document.getElementById('bests').innerHTML += `
+                <div class="transactions-list">
+                        <div class="tr-item">
+                            <div class="tr-company-name">
+                                <div class="tr-icon tr-card-icon tr-card-bg-primary text-primary">
+                                    <i data-feather="book"></i>
+                                </div>
+                                <div class="tr-text">
+                                    <h4>${namesproducts[item._id]}</h4>
+                                    <p>${item.value} шт</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              `
+          })
+      })
+
+
+
+  </script>

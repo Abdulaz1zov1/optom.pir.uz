@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center pr-1 justify-content-between">
+                    <h5 class="card-title">Отчёт</h5>
+                    {{#if control }}
+                        <a href="/users/create" class="btn btn-success mr-1">Добавить</a>
+                    {{/if}}
+                </div>
+                <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Номер телефона</th>
+                        <th scope="col">Статус</th>
+                        <th scope="col">Количество заказов</th>
+                        <th scope="col">Сумма заказов</th>
+                        <th scope="col">Количество входа</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each users}}
+                        <tr>
+                            <td>{{index}}</td>
+                            <td>{{name}}</td>
+                            <td>{{phone}}</td>
+                            <td>{{role}}</td>
+                            <td>{{orderCount}}</td>
+                            <td>
+                                {{orderSumma}} сум
+                            </td>
+                            <td>{{logAt.length}}</td>
+
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

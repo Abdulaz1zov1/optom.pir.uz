@@ -1,0 +1,390 @@
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title nomb">{{title}}</h5>
+                        {{#if control }}
+                        <a href="/product/create" class="btn btn-success mr-1">Добавить товара</a>
+
+                        {{/if}}
+                </div>
+                        <form name="search" class="d-flex justify-content-end mb-5 mobile-direction">
+                            <input type="text" name="title" placeholder="Название" class="form-control">
+                            <select name="category" class="form-select ml-1" id="">
+                                <option selected value="">Выберите категории</option>
+                                {{#each category}}
+                                    <option value="{{_id}}">{{title}}</option>
+                                {{/each}}
+
+                            </select>
+                            <select name="color" class="form-select ml-1" id="">
+                                <option selected value="">Выберите цвет</option>
+                                <option value="0">Цветной</option>
+                                <option value="1">Ч/б</option>
+                            </select>
+                            <select name="type" class="form-select ml-1" id="">
+                                <option  selected value="">Тип обложки</option>
+                                <option value="0">Твердая</option>
+                                <option value="1">Мягкий</option>
+                            </select>
+                            <select name="format" class="form-select ml-1" id="">
+                                <option  selected value="">Формат бумаги</option>
+                                <option value="4">A4</option>
+                                <option value="5">A5</option>
+                                <option value="0">Другое</option>
+                            </select>
+                            <button class="btn btn-warning ml-1" type="reset">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="btn btn-primary ml-1" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+
+                        </form>
+
+                <div class="row" id="res">
+                    {{#each products}}
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card pos {{alert}} count-{{count}} card-{{_id}}">
+                                <div class="card__info">
+                                    <a href="/{{photo}}" class="card__bg" style="background-image: url('/{{photo}}')" data-lightbox="{{_id}}"
+                                       data-title="{{title}}"
+                                    ></a>
+                                    {{#each others}}
+                                        <a href="/{{this}}" class="card__bg" style="display: none" data-lightbox="{{../_id}}"
+                                           data-title="{{title}}"
+                                        ></a>
+                                    {{/each}}
+                                    <div class="card__right">
+                                        <div class="card__row">
+                                            <span>Цвет</span>
+                                            <b>{{color}}</b>
+                                        </div>
+                                        <div class="card__row">
+                                            <span>Обложка</span>
+                                            <b>{{type}}</b>
+                                        </div>
+                                        <div class="card__row">
+                                            <span>Формат</span>
+                                            <b>{{format}}</b>
+                                        </div>
+                                    {{#if @root.btns}}
+                                        <div class="card__row">
+                                            <span>Общая </span>
+                                            <b class="text-success">{{count}} шт</b>
+                                        </div>
+                                        <div class="card__row">
+                                            <span>Пачки </span>
+                                            <b class="text-primary">{{num}} пачек</b>
+                                        </div>
+                                    {{/if}}
+                                        <div class="card__row">
+                                            <span>В пачке</span>
+                                            <b>{{pack}} шт</b>
+                                        </div>
+                                    {{#if @root.btns}}
+                                        <div class="card__row">
+                                            <span>Остатка</span>
+                                            <b class="text-warning">{{balance}} шт</b>
+                                        </div>
+                                    {{/if}}
+                                    </div>
+                                </div>
+                                <div class="card__row">
+                                    <div class="card__cat">{{category.title}}</div>
+                                    <div class="card__price">{{price}} сум</div>
+                                </div>
+                                <div class="card__title">{{title}}</div>
+                                {{#if @root.btns}}
+                                    <div class="card__btns">
+                                        <a href="/product/edit/{{_id}}" class="btn btn-warning"><i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="/product/delete/{{_id}}" class="btn btn-danger" onclick="return confirm('Вы уверены?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                {{else}}
+                                    <div class="cardbtns">
+                                        <input type="number" data-in="{{pack}}" class="pack-{{_id}}"
+                                               placeholder="Пачка">
+                                        <input type="number" class="num-{{_id}}" placeholder="Штук">
+                                        <input type="hidden" class="title-{{_id}}" value="{{title}}">
+                                        <input type="hidden" class="price-{{_id}}" value="{{price}}">
+                                        <button class="btn btn-primary " onclick="addcart(event,'{{_id}}')"><i
+                                                class="fas
+                                            fa-shopping-cart"></i></button>
+                                    </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{#if btns}}
+{{else}}
+    <button type="button" class="btn btn-primary allcard" data-bs-toggle="modal" data-bs-target="#cardmodal">
+        <span id="cardcount">2</span>
+        <i class="fas fa-shopping-cart"></i>
+    </button>
+
+{{/if}}
+<div class="modal fade" id="cardmodal" tabindex="-1" aria-labelledby="cardmodal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Корзинка</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="cardlist">
+
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-between align-items-center" style="width: 100%">
+                    <div>
+                        <input type="text" class="form-control" oninput="document.getElementById('sale').value=event.target.value"  placeholder="Скидка в сумах">
+                    </div>
+                    <div class="d-flex">
+                        <h5>Общая сумма</h5> <h5 class="ml-1" id="summa"></h5>
+                    </div>
+                </div>
+                <input type="text" class="form-control" oninput="document.getElementById('address').value=event.target.value"  placeholder="Адрес">
+                <input type="text" class="form-control" oninput="document.getElementById('name').value=event.target.value"  placeholder="Имя">
+                <input type="number" class="form-control" oninput="document.getElementById('phone').value=event
+                .target.value"  placeholder="Номер телефон">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Очистить</button>
+                <form action="/order/" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <input type="hidden" name="user" value="{{user._id}}">
+                    <input type="hidden" name="name" id="name">
+                    <input type="hidden" name="phone" id="phone">
+                    <input type="hidden" name="address" id="address">
+                    <input type="hidden" name="sale" id="sale">
+                    <input type="hidden" name="data" id="data">
+                <button type="submit" class="btn btn-primary">Отпправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let form = document.forms.search
+    let filteredBox = document.getElementById('res')
+    let cardcount = document.getElementById('cardcount')
+    let cardlist = document.getElementById('cardlist')
+    let data = document.getElementById('data')
+    form.addEventListener('submit',async (e)=>{
+        e.preventDefault()
+        let formData = new FormData(form)
+        let searchQuery = {}
+        formData.forEach((value,name)=>{
+            searchQuery[name] = value
+        })
+        const res = await fetch('/product/api/search?'+ new URLSearchParams(searchQuery))
+        const data = await res.json()
+        filteredBox.innerHTML = ''
+        data.forEach(product=> {
+            let btns = product.btns ? `<a href="/product/edit/${product._id}" class="btn btn-warning"><i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/product/delete/${product._id}" class="btn btn-danger" onclick="return confirm('Вы уверены?')">
+                                <i class="fas fa-trash"></i>
+                            </a>` : `<button class="btn btn-primary" onclick="addcart(${product._id}"><i class="fas
+                            fa-shopping-cart"></i></button>`
+            filteredBox.innerHTML += `
+                <div class="col-3">
+                    <div class="card pos ${product._id}">
+                        <div class="card__btns">
+                            ${btns}
+
+                        </div>
+                        <div class="card__info">
+                            <div class="card__bg" style="background-image: url('/${product.photo}')"></div>
+                            <div class="card__right">
+                                <div class="card__row">
+                                    <span>Цвет</span>
+                                    <b>${product.color}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Обложка</span>
+                                    <b>${product.type}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Формат</span>
+                                    <b>${product.format}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Общая </span>
+                                    <b class="text-success">${product.count} шт</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Пачки </span>
+                                    <b class="text-primary">${Math.floor(product.count/product.pack)} пачек</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>В пачке</span>
+                                    <b>${product.pack.toLocaleString()} шт</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Остатка</span>
+                                    <b class="text-warning">${product.count%product.pack} шт</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card__row">
+                            <div class="card__cat">${product.category.title}</div>
+                            <div class="card__price">${product.price.toLocaleString()} сум</div>
+                        </div>
+                        <div class="card__title">${product.title}</div>
+                    </div>
+                </div>
+            `
+        })
+    })
+    form.addEventListener('reset',async (e)=>{
+        const res = await fetch('/product/api/all')
+        const data = await res.json()
+        filteredBox.innerHTML = ''
+        // console.log(data)
+        data.forEach(product=> {
+            product.price = product.price ? parseInt(product.price).toLocaleString() : 0
+            let btns = product.btns ? `<a href="/product/edit/${product._id}" class="btn btn-warning"><i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/product/delete/${product._id}" class="btn btn-danger" onclick="return confirm('Вы уверены?')">
+                                <i class="fas fa-trash"></i>
+                            </a>` : `<button class="btn btn-primary" onclick="addcart(${product._id}"><i class="fas
+                            fa-shopping-cart"></i></button>`
+            filteredBox.innerHTML += `
+                <div class="col-3">
+                    <div class="card pos">
+                        <div class="card__btns">
+                            ${btns}
+                        </div>
+                        <div class="card__info">
+                            <div class="card__bg" style="background-image: url('/${product.photo}')"></div>
+                            <div class="card__right">
+                                <div class="card__row">
+                                    <span>Цвет</span>
+                                    <b>${product.color}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Обложка</span>
+                                    <b>${product.type}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Формат</span>
+                                    <b>${product.format}</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Общая </span>
+                                    <b class="text-success">${product.count} шт</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Пачки </span>
+                                    <b class="text-primary">${Math.floor(product.count/product.pack)} пачек</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>В пачке</span>
+                                    <b>${product.pack} шт</b>
+                                </div>
+                                <div class="card__row">
+                                    <span>Остатка</span>
+                                    <b class="text-warning">${product.count%product.pack} шт</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card__row">
+                            <div class="card__cat">${product.category.title}</div>
+                            <div class="card__price">${product.price.toLocaleString()} сум</div>
+                        </div>
+                        <div class="card__title">${product.title}</div>
+                    </div>
+                </div>
+            `
+        })
+    })
+    let proCart = []
+
+    if (localStorage.getItem('cart')){
+        proCart = JSON.parse(localStorage.getItem('cart'))
+        checkNone()
+    }
+    cardcount.textContent = proCart.length
+
+    function checkNone(){
+        proCart.forEach(pro => {
+            document.querySelector(`.card-${pro.id}`).classList.add('none')
+        })
+    }
+
+    const show = () => {
+        cardlist.innerHTML =''
+        let summa = 0
+        proCart.forEach((pro,index) => {
+            summa += pro.num*pro.price
+            document.getElementById('summa').innerHTML = summa.toLocaleString() + ' сум'
+            cardlist.innerHTML += `
+                <div class="carditem">
+                    <div class="cardtitle">${pro.title}</div>
+                    <div class="cardnum">${pro.num.toLocaleString()} шт</div>
+                    x
+                    <div class="cardprice">${pro.price.toLocaleString()} сум</div>
+                    =
+                    <div class="cardprice">${(pro.num*pro.price).toLocaleString()} сум</div>
+                </div>
+                <div class="cardremove">
+                    <button onclick="removeCart(${index})">Удалить</button>
+                </div>
+            `
+        })
+        data.value = JSON.stringify(proCart)
+    }
+
+    show()
+
+
+
+    const removeCart = (index) => {
+        document.querySelector(`.card-${proCart[index].id}`).classList.remove('none')
+
+        proCart.splice(index,1)
+        localStorage.setItem('cart',JSON.stringify(proCart))
+        cardcount.textContent = proCart.length
+        show()
+    }
+
+    const addcart = (e,id)=>{
+        e.target.classList.remove('btn-primary')
+        e.target.classList.add('btn-success')
+        document.querySelector(`.card-${id}`).classList.add('none')
+        setTimeout(()=>{
+            e.target.classList.add('btn-primary')
+            e.target.classList.remove('btn-success')
+        },2000)
+        let packBox = document.querySelector(`.pack-${id}`)
+        let numBox = document.querySelector(`.num-${id}`)
+        let pack = +packBox.value || 0
+        let inPack = +packBox.getAttribute('data-in')
+        let num = +numBox.value || 0
+        num += pack*inPack
+        let title = document.querySelector(`.title-${id}`).value
+        let price = +document.querySelector(`.price-${id}`).value
+        console.log({num,title,price})
+        let checkIndex = proCart.findIndex(cart => cart.id === id)
+        if (checkIndex == -1)
+            proCart.push({id,num,title,price,pack})
+        else proCart[checkIndex].num += num
+        localStorage.setItem('cart',JSON.stringify(proCart))
+
+        packBox.value = ''
+        numBox.value = ''
+        cardcount.textContent = proCart.length
+        show()
+    }
+
+</script>
+

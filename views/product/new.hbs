@@ -1,0 +1,159 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Новый товар</h5>
+                <form action="/product/" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="title" required class="form-control" id="floatingInput1" placeholder="Имя">
+                                <div class="invalid-feedback">
+                                    Заполните поля
+                                </div>
+                                <label for="floatingInput1">Название товара</label>
+                            </div>
+                        </div>
+                        <div class="col-4 ">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="category" id="floatingSelect1" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    {{#each category}}
+                                    <option value="{{_id}}">{{title}}</option>
+                                    {{/each}}
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingSelect1">Категория</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="price" id="price" class="form-control" placeholder="Стоимость">
+                                <label for="price" >Стоимость</label>
+                            </div>
+                        </div>
+                        <div class="col-4 ">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="color" id="floatingSelect1" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">Цветной</option>
+                                    <option value="1">Черно-белый</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingSelect1">Цвет</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="type" id="floatingSelect1" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="0">Твердая</option>
+                                    <option value="1">Мягкий</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingSelect1">Тип обложки</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="format" id="floatingSelect1" aria-label="Floating label select example" required>
+                                    <option selected disabled value="">Выберите из списка</option>
+                                    <option value="4">A4</option>
+                                    <option value="5">A5</option>
+                                    <option value="0">Другое</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Выберите из списка
+                                </div>
+                                <label for="floatingSelect1">Формат бумаги</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="count" class="form-control" id="count" oninput="calc()"
+                                       placeholder="Количество штуки" required>
+                                <label for="count" id="countlabel">Количество штуки</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="number" name="pack"  class="form-control" id="pack" oninput="calc()"
+                                       placeholder="Количество пачки">
+                                <label for="pack">Количество в одном пачке</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="number"  class="form-control" id="res" placeholder="Количество пачки" disabled>
+                                <label for="res">Количество пачки</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="number"  class="form-control" id="rescount" placeholder="Количество штук
+                                 от пачки" disabled>
+                                <label for="res">Количество штук от пачки</label>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="col-6 mb-3">
+                            <label for="formFileMultiple" class="form-label">Фотография книги</label>
+                            <input class="form-control" name="photo" type="file" id="formFileMultiple" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="formFileMultiple1" class="form-label">Остальные фотографии</label>
+                            <input class="form-control" name="others" type="file" multiple id="formFileMultiple1">
+                        </div>
+
+                    </div>
+                    
+                    <button type="submit" class="mt-3 btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+<script>
+    let count = document.getElementById('count')
+    let pack = document.getElementById('pack')
+    let res = document.getElementById('res')
+    let rescount = document.getElementById('rescount')
+
+    function calc() {
+        res.value = Math.floor(count.value/pack.value)
+        rescount.value = count.value%pack.value
+    }
+
+    // let typecount = document.getElementById('typecount')
+    // let pack = document.getElementById('pack')
+    // let count = document.getElementById('count')
+    // let countlabel = document.getElementById('countlabel')
+    // let price = document.getElementById('price')
+    // let pricelabel = document.getElementById('pricelabel')
+    // typecount.addEventListener('input',()=>{
+    //     if (typecount.value == 0){
+    //         pack.disabled = true
+    //         count.setAttribute('placeholder','Количество штуки')
+    //         countlabel.textContent = 'Количество штуки'
+    //         price.setAttribute('placeholder','Стоимость одного штуки')
+    //         pricelabel.textContent = 'Стоимость одного штуки'
+    //     } else {
+    //         pack.disabled = false
+    //         count.setAttribute('placeholder','Количество штука в пачке')
+    //         countlabel.textContent = 'Количество штука в пачке'
+    //         price.setAttribute('placeholder','Стоимость одного пачки')
+    //         pricelabel.textContent = 'Стоимость одного пачки'
+    //     }
+    // })
+
+</script>

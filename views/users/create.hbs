@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Новый пользователь</h5>
+                <p class="card-description">Запольните поля</p>
+                <form action="/users/" method="post" >
+                    <input type="hidden" name="_csrf" value="{{csrf}}">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="text" name="name"
+                                       pattern="[a-z]+"
+                                       class="form-control" id="name" placeholder="Только латинском буквами" required>
+                                <label for="name">Имя</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="phone" name="phone" class="form-control" maxlength="9" id="phone" placeholder="Номер телефона" required>
+                                <label for="phone">Номер телефона для входа</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <input type="password" name="password" class="form-control" id="floatingInput2" placeholder="Паоль для входа" required>
+                                <label for="floatingInput2">Пароль для входа</label>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="mb-3 form-floating">
+                                <select class="form-select" name="role" id="floatingSelect" aria-label="Floating label select example" required>
+                                    <option selected="" value="1">Выберите из списка</option>
+                                    <option value="1">Ритейлер</option>
+                                    <option value="2">Новый ритейлер</option>
+                                    <option value="3">Отключенный</option>
+                                </select>
+                                <label for="floatingSelect">Доступ пользователя</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
